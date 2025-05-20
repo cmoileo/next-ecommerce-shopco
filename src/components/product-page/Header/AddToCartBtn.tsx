@@ -1,5 +1,6 @@
 "use client";
 
+import { trackUserAction } from "@/lib/analytics";
 import { addToCart } from "@/lib/features/carts/cartsSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { RootState } from "@/lib/store";
@@ -16,7 +17,7 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
     <button
       type="button"
       className="bg-black w-full ml-3 sm:ml-5 rounded-full h-11 md:h-[52px] text-sm sm:text-base text-white hover:bg-black/80 transition-all"
-      onClick={() =>
+      onClick={() => {
         dispatch(
           addToCart({
             id: data.id,
@@ -27,8 +28,16 @@ const AddToCartBtn = ({ data }: { data: Product & { quantity: number } }) => {
             discount: data.discount,
             quantity: data.quantity,
           })
-        )
-      }
+        );
+        trackUserAction({
+          userId: "u123",
+          sessionId: "s456",
+          eventType: "click",
+          element: "add-to-cart-button",
+          page: "/product/slug",
+          metadata: { productId: "abc123" },
+        });
+      }}
     >
       Add to Cart
     </button>
