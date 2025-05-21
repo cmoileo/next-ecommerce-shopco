@@ -2,14 +2,19 @@ import { Kafka, logLevel, Partitioners, Producer } from "kafkajs";
 
 const kafka = new Kafka({
   clientId: "commerce-analytics",
-  brokers: ["host.docker.internal:9092"],
+  brokers: ["localhost:9092"],
   logLevel: logLevel.INFO,
 });
 
 const producer: Producer = kafka.producer();
 
 export async function initProducer() {
-  await producer.connect();
+  try {
+    await producer.connect();
+    console.log("[Kafka] Producer connected");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function sendUserAction(message: any) {

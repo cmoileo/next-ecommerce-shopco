@@ -28,6 +28,10 @@ export const makeStore = () => {
       }),
   });
 
+  store.dispatch({
+    type: "carts/emptyCart",
+  });
+
   const persistor = persistStore(store);
   return { store, persistor };
 };
